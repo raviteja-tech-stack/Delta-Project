@@ -32,12 +32,19 @@ module.exports.createListing = async (req, res, next) => {
     })
     .send();
 
-  let url = req.file.path;
-  let filename = req.file.filename;
   const newListing = new Listing(req.body.listing);
   newListing.owner = req.user._id;
-  newListing.image = { url, filename };
+
+  // ✔ Add image ONLY if user uploaded one
+  if (req.file) {
+    let url = req.file.path;
+    let filename = req.file.filename;
+    newListing.image = { url, filename };
+  }
+  // ❌ If no req.file → default image from Schema will be used automatically
+
   newListing.geometry = response.body.features[0].geometry;
+
   await newListing.save();
   console.log(newListing);
   req.flash("success", "New Listing Created!");
