@@ -85,6 +85,29 @@
           />
           <div class="invalid-feedback">Location is not given</div>
         </div>
+        <div class="mb-3">
+          <label for="category" class="form-label">Category</label>
+          <select
+            name="listing[category]"
+            id="category"
+            class="form-select"
+            required
+          >
+            <option value="" disabled selected>Select a Category</option>
+            <option value="trending">Trending</option>
+            <option value="rooms">Rooms</option>
+            <option value="iconic">Iconic Cities</option>
+            <option value="mountains">Mountains</option>
+            <option value="castles">Castles</option>
+            <option value="pools">Amazing Pools</option>
+            <option value="camping">Camping</option>
+            <option value="farms">Farms</option>
+            <option value="arctic">Arctic</option>
+            <option value="domes">Domes</option>
+            <option value="boats">Boats</option>
+          </select>
+          <div class="invalid-feedback">Category is required</div>
+        </div>
 
         <button class="btn btn-dark add-btn mt-3">Add</button>
       </form>

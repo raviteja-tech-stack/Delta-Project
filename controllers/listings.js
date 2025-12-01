@@ -33,6 +33,7 @@ module.exports.createListing = async (req, res, next) => {
     .send();
 
   const newListing = new Listing(req.body.listing);
+  newListing.category = req.body.listing.category;
   newListing.owner = req.user._id;
 
   // ✔ Add image ONLY if user uploaded one
@@ -83,4 +84,33 @@ module.exports.destroyListing = async (req, res) => {
   req.flash("success", "Listing Deleted!");
 
   res.redirect("/listings");
+};
+
+module.exports.searchListings = async (req, res) => {
+  const { q } = req.query;
+
+  // If no query → redirect to all listings
+  if (!q || q.trim() === "") {
+    req.flash("error", "Please enter a search term.");
+    return res.redirect("/listings");
+  }
+
+  // Find matching titles or locations
+  const listings = await Listing.find({
+    $or: [
+      { title: { $regex: q, $options: "i" } },
+      { location: { $regex: q, $options: "i" } },
+      { country: { $regex: q, $options: "i" } },
+    ],
+  });
+
+  res.render("listings/search.ejs", { listings, q });
+};
+
+module.exports.categoryListings = async (req, res) => {
+  const { category } = req.params;
+
+  const listings = await Listing.find({ category });
+
+  res.render("listings/category.ejs", { listings, category });
 };
